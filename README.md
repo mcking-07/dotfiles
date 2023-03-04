@@ -6,7 +6,7 @@ To install these dotfiles on your system, you can use the following steps:
 
 ```
 git clone https://github.com/mcking-07/dotfiles.git ~/.dotfiles
-cd dotfiles
+cd ~/.dotfiles
 ./install.sh
 ```
 
