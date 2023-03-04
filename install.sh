@@ -1,8 +1,8 @@
 # install script for dotfiles by @mcking-07
 
 # define the list of dotfile and config folders
-DOT_FOLDERS=""
-DOT_CONFIG_FOLDERS=""
+DOT_FOLDERS="bash"
+DOT_CONFIG_FOLDERS="starship"
 
 # check if root
 if [[ $EUID -ne 0 ]]; then
