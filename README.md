@@ -5,7 +5,7 @@ This repository contains my personal dotfiles for setting up a unix-like environ
 To install these dotfiles on your system, you can use the following steps:
 
 ```
-git clone https://github.com/mcking-07/dotfiles.git
+git clone https://github.com/mcking-07/dotfiles.git ~/.dotfiles
 cd dotfiles
 ./install.sh
 ```
