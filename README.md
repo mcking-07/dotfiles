@@ -14,4 +14,3 @@ The installation script will copy the dotfiles to your home directory and create
 
 ## Usage
 These dotfiles are designed to work with a unix-like environment, such as macOS or Linux. Once installed, you can customize the dotfiles to your liking. Some common customizations include adding aliases, setting environment variables, and configuring applications.
-
