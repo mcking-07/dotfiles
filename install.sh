@@ -2,7 +2,7 @@
 
 # define the list of dotfile and config folders
 DOT_FOLDERS="bash"
-DOT_CONFIG_FOLDERS="starship"
+DOT_CONFIG_FOLDERS="starship, nvim"
 
 # check if root
 if [[ $EUID -ne 0 ]]; then
