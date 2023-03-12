@@ -1,4 +1,4 @@
-# custom bash aliases by @mcking-07
+# custom bash aliases and abbreviations by @mcking-07
 
 # batcat command
 alias bat='batcat'
@@ -17,14 +17,14 @@ alias cpv='rsync -ah --info=progress2'
 alias dkps='docker ps'
 alias dkpsa='docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"'
 alias dkimg='docker image ls --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}" | sort'
-alias dkstrt='docker start'
-alias dkstp='docker stop'
-alias dkrm='docker rm'
-alias dkrmi='docker rmi'
-alias dklgs='docker logs'
+abbrev-alias -g dkstrt='docker start'
+abbrev-alias -g dkstp='docker stop'
+abbrev-alias -g dkrm='docker rm'
+abbrev-alias -g dkrmi='docker rmi'
+abbrev-alias -g dklgs='docker logs'
 alias dkvlm='docker volume ls'
 alias dkntrk='docker network ls'
-alias dkterm='docker exec -it'
+abbrev-alias -g dkterm='docker exec -it'
 alias dcps='docker-compose ps'
 alias dcup='docker-compose up'
 alias dcdn='docker-compose down'
@@ -49,8 +49,8 @@ alias gp='git pull'
 alias gpo='git pull origin main'
 alias gsh='git stash'
 alias gsp='git stash pop'
-alias gco='git checkout'
-alias gcm='git checkout main'
+abbrev-alias -g gco='git checkout'
+abbrev-alias -g gcm='git checkout main'
 alias gw='git whatchanged'
 
 # launch http server
@@ -62,6 +62,20 @@ serve() {
   fi
 }
 alias servelocal='python3 -m http.server'
+
+# nala config
+apt() {
+  command nala "$@"
+}
+
+sudo() {
+  if [ "$1" = "apt" ]; then
+    shift
+    command sudo nala "$@"
+  else
+    command sudo "$@"
+  fi
+}
 
 # xdg-open
 alias open='xdg-open'
