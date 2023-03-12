@@ -1,14 +1,8 @@
 # install script for dotfiles by @mcking-07
 
 # define the list of dotfile and config folders
-DOT_FOLDERS="bash"
 DOT_CONFIG_FOLDERS="starship, nvim"
-
-# check if root
-if [[ $EUID -ne 0 ]]; then
-  echo "You must be a root user to run this script, please run sudo ./install.sh" 2>&1
-  exit 1
-fi
+DOT_FOLDERS="bash"
 
 set -e
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
@@ -16,40 +10,40 @@ PRESENT=false
 
 echo "[+] Dotfiles :: $SCRIPT_DIR"
 
+# install stow if not already installed
 if ! command -v stow &>/dev/null; then
+  echo "[+] Installing stow..."
   sudo apt install -y stow
 fi
 
+# loop through dotconfig folders and create symlinks
+for folder in $(echo $DOT_CONFIG_FOLDERS | sed "s/,/ /g"); do
+  echo "[+] Creating symlinks for $folder"
+  mkdir -p $HOME/.config/$folder
+
+  stow -t $HOME/.config -D $folder &>/dev/null
+  stow -v -t $HOME/.config/$folder $folder &>/dev/null
+done
+
 # loop through dotfile folders and create symlinks
 for folder in $(echo $DOT_FOLDERS | sed "s/,/ /g"); do
-  echo "[+] Folder :: $folder"
+  echo "[+] Creating symlinks for $folder"
 
-  stow -t $HOME -D $folder \
-    --ignore=README.md --ignore=LICENSE
-  stow -v -t $HOME $folder
+  stow -t $HOME -D $folder &>/dev/null
+  stow -v -t $HOME $folder &>/dev/null
 done
 
-# loop through config folders and create symlinks
-for folder in $(echo $DOT_CONFIG_FOLDERS | sed "s/,/ /g"); do
-  echo "[+] Folder :: $folder"
-
-  stow -t $HOME/.config -D $folder \
-    --ignore=README.md --ignore=LICENSE
-  stow -v -t $HOME/.config $folder
-done
-
-# look for DOT_FOLDER or DOT_CONFIG_FOLDER in the .env
+# look for DOT_FOLDER in the .env
 while IFS= read -r var; do
-  [[ $var =~ ^(DOT_FOLDER|DOT_CONFIG_FOLDER).* ]] && PRESENT=true
+  [[ $var =~ ^(DOT_FOLDER).* ]] && PRESENT=true
 done <"$HOME/.env"
 
-# If not present, write the DOT_FOLDER or DOT_CONFIG_FOLDER var into the file
+# If not present, write the DOT_FOLDER into the file
 if [[ $PRESENT == "false" ]]; then
-  echo "[+] Adding DOT_FOLDER and DOT_CONFIG_FOLDER to .env"
+  echo "[+] Adding DOT_FOLDER to .env"
   echo "DOT_FOLDER=$SCRIPT_DIR" >>$HOME/.env
-  echo "DOT_CONFIG_FOLDER=$SCRIPT_DIR/.config" >>$HOME/.env
 fi
 
 # reload shell once installed
-echo "[+] Reloading shell..."
+echo "[+] Dotfiles installation complete. Reloading shell..."
 exec $SHELL -l
