@@ -6,11 +6,11 @@ if [ -f ~/.bash/bashrc ]; then
 fi
 
 # abbreviation plugin
-if [ -f ~/.bash/bash_abbreviations ]; then
-  . ~/.bash/bash_abbreviations
+if [ -f ~/.bash/bash_abbreviations_plugin ]; then
+  source ~/.bash/bash_abbreviations_plugin
 fi
 
 # alias definitions
 if [ -f ~/.bash/bash_aliases ]; then
-  . ~/.bash/bash_aliases
+  source ~/.bash/bash_aliases
 fi
