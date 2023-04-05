@@ -1,7 +1,8 @@
 # uninstall script for dotfiles by @mcking-07
 
-DOT_CONFIG_FOLDERS='starship, nvim'
-DOT_FOLDERS='bash'
+# DOT_CONFIG_FOLDERS='starship, nvim'
+# DOT_FOLDERS='bash, git'
+DOT_FOLDERS='git'
 
 for folder in $(echo $DOT_CONFIG_FOLDERS | sed "s/,/ /g"); do
   echo "[+] $folder"
@@ -12,5 +13,3 @@ for folder in $(echo $DOT_FOLDERS | sed "s/,/ /g"); do
   echo "[+] $folder"
   stow -t $HOME -D $folder &>/dev/null
 done
-
-
