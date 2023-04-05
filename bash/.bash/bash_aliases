@@ -13,19 +13,18 @@ alias ports='netstat -tulanp'
 # confirmation before overwriting
 alias cp="cp -i"
 alias mv='mv -i'
-alias rm='rm -i'
 
 # docker
-alias dkps='docker ps'
-alias dkpsa='docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"'
-alias dkimg='docker image ls --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}" | sort'
+alias dps='docker ps'
+alias dpsa='docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"'
+alias dimg='docker image ls --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}" | sort'
 abbrev-alias -g dkstrt='docker start'
 abbrev-alias -g dkstp='docker stop'
 abbrev-alias -g dkrm='docker rm'
 abbrev-alias -g dkrmi='docker rmi'
 abbrev-alias -g dklgs='docker logs'
-alias dkvlm='docker volume ls'
-alias dkntrk='docker network ls'
+alias dvlm='docker volume ls'
+alias dntrk='docker network ls'
 abbrev-alias -g dkterm='docker exec -it'
 alias dcps='docker-compose ps'
 alias dcup='docker-compose up'
@@ -49,7 +48,7 @@ alias gw='git whatchanged'
 # grep
 alias grep='grep --color=always'
 alias egrep='egrep --color=always'
-alias fgrep='find . | grep --color=always' # find a file
+alias fgrep='find . | grep --color=always'  # find a file
 alias hgrep='history | grep --color=always' # find an old command
 alias psgrep='ps aux | grep --color=always' # get process details
 
@@ -79,6 +78,14 @@ else
   alias l='ls -CF --color=always'
 fi
 
+# trash-cli as rm
+if command -v trash &>/dev/null; then
+  alias rm='trash'
+  alias rmll='trash-list'
+  alias rmrs='trash-restore'
+  alias rmrx='trash-empty'
+fi
+
 # vim as neovim
 if command -v nvim &>/dev/null; then
   alias vi='nvim'
@@ -89,7 +96,7 @@ fi
 alias open='xdg-open'
 
 # zipfile extractor
-ex () {
+ex() {
   if [ -f "$1" ]; then
     case $1 in
       *.tar.gz) tar xzf $1;;

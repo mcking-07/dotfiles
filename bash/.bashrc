@@ -14,3 +14,8 @@ fi
 if [ -f ~/.bash/bash_aliases ]; then
   source ~/.bash/bash_aliases
 fi
+
+# ssh definitions
+if [ -f ~/.bash/ssh_aliases ]; then
+  source ~/.bash/ssh_aliases
+fi
