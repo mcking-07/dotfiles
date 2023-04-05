@@ -1,8 +1,9 @@
 # install script for dotfiles by @mcking-07
 
 # define the list of dotfile and config folders
-DOT_CONFIG_FOLDERS="starship, nvim"
-DOT_FOLDERS="bash"
+# DOT_CONFIG_FOLDERS="starship, nvim"
+DOT_FOLDERS="git"
+# DOT_FOLDERS="bash, git"
 
 set -e
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
