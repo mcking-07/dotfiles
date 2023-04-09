@@ -1,8 +1,8 @@
 # uninstall script for dotfiles by @mcking-07
 
 # define the list of dotfile and config folders
-DOT_CONFIG_FOLDERS='starship, nvim'
-DOT_FOLDERS='bash, git'
+DOT_CONFIG_FOLDERS="starship, nvim"
+DOT_FOLDERS="bash, git, hyper"
 
 # loop through dotconfig folders and remove symlinks
 for folder in $(echo $DOT_CONFIG_FOLDERS | sed "s/,/ /g"); do
