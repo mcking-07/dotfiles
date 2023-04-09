@@ -2,7 +2,7 @@
 
 # define the list of dotfile and config folders
 DOT_CONFIG_FOLDERS="starship, nvim"
-DOT_FOLDERS="bash, git"
+DOT_FOLDERS="bash, git, hyper"
 
 set -e
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
