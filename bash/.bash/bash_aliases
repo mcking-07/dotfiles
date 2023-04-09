@@ -78,6 +78,21 @@ else
   alias l='ls -CF --color=always'
 fi
 
+# note maker
+note() {
+  local NOTES_FILE="$HOME/.bits-and-bobs.md"
+  local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+  local content="$1"
+  local title="$2"
+  local note_header="## $timestamp"
+  if [ -n "$title" ]; then
+    note_header+=" - **$title**"
+  fi
+  echo -e "$note_header\n" >>"$NOTES_FILE"
+  echo -e "$content\n" >>"$NOTES_FILE"
+  echo "---" >>"$NOTES_FILE"
+}
+
 # trash-cli as rm
 if command -v trash &>/dev/null; then
   alias rm='trash'
