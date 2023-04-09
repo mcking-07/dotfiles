@@ -81,6 +81,9 @@ fi
 # note maker
 note() {
   local NOTES_FILE="$HOME/.bits-and-bobs.md"
+  if [ ! -f "$NOTES_FILE" ]; then
+    touch "$NOTES_FILE"
+  fi
   local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
   local content="$1"
   local title="$2"
