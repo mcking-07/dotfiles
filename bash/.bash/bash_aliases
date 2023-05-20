@@ -96,6 +96,15 @@ note() {
   echo "---" >>"$NOTES_FILE"
 }
 
+# notes viewer
+notes() {
+  local NOTES_FILE="$HOME/.bits-and-bobs.md"
+  command batcat $NOTES_FILE
+}
+
+# source
+alias ss='source ~/.bashrc'
+
 # trash-cli as rm
 if command -v trash &>/dev/null; then
   alias rm='trash'

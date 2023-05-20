@@ -1,6 +1,8 @@
 typeset -g _ABBREV_ALIAS_VERSION='0.1.0'
 typeset -Ag _abbrev_aliases
 
+set -o emacs
+
 __abbrev_alias::magic_abbrev_expand() {
   local left=${READLINE_LINE:0:${READLINE_POINT}}
   local right=${READLINE_LINE:${READLINE_POINT}}
