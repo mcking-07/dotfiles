@@ -70,7 +70,7 @@ serve() {
   elif command -v ngrok &> /dev/null; then
     command python3 -m http.server | ngrok http "$port"
   else
-    echo "Usage: Install either 'lt' or 'ngrok' to expose local ports."
+    echo "Usage: Install either 'lt' or 'ngrok' to expose local ports"
   fi
 }
 alias servelocal='python3 -m http.server'
