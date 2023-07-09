@@ -15,30 +15,34 @@ alias cp="cp -i"
 alias mv='mv -i'
 
 # docker
-alias dps='docker ps'
+alias dps='docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
 alias dpsa='docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"'
-alias dimg='docker image ls --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}" | sort'
-abbrev-alias -g dkstrt='docker start'
-abbrev-alias -g dkstp='docker stop'
-abbrev-alias -g dkrm='docker rm'
-abbrev-alias -g dkrmi='docker rmi'
-abbrev-alias -g dklgs='docker logs'
+alias dimg='docker image ls --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}"'
+abbrev-alias -g dstart='docker start'
+abbrev-alias -g dstop='docker stop'
+abbrev-alias -g drm='docker rm'
+abbrev-alias -g drmi='docker rmi'
+abbrev-alias -g dklg='docker logs'
 alias dvlm='docker volume ls'
 alias dntrk='docker network ls'
 abbrev-alias -g dkterm='docker exec -it'
-alias dcps='docker-compose ps'
 alias dcup='docker-compose up'
+alias dcupd='docker-compose up -d'
+alias dclgs='docker-compose logs -f'
 alias dcdn='docker-compose down'
 alias dcdrm='docker-compose down --rmi local -v'
 
 # git
 alias clone='git clone'
 alias gb='git branch'
+alias gd='git diff'
 alias gs='git status'
 alias gl='git log'
 alias gps='git push'
 alias gp='git pull'
 alias gpo='git pull origin main'
+alias gpr='git pull --rebase'
+alias gr='git revert'
 alias gsh='git stash'
 alias gsp='git stash pop'
 abbrev-alias -g gco='git checkout'
@@ -52,15 +56,21 @@ alias fgrep='find . | grep --color=always'  # find a file
 alias hgrep='history | grep --color=always' # find an old command
 alias psgrep='ps aux | grep --color=always' # get process details
 
+# hyperinator
+alias hype='hyperinator load'
+
 # journalctl
 alias jctl="journalctl -p 3 -xb" # erros only
 
 # launch http server
 serve() {
-  if [ "$1" != '' ]; then
-    command python3 -m http.server "$1" | lt -p "$1"
+  local port="${1:-8000}"
+  if command -v lt &> /dev/null; then
+    command python3 -m http.server | lt -p "$port"
+  elif command -v ngrok &> /dev/null; then
+    command python3 -m http.server | ngrok http "$port"
   else
-    command python3 -m http.server 8000 | lt -p 8000
+    echo "Usage: Install either 'lt' or 'ngrok' to expose local ports."
   fi
 }
 alias servelocal='python3 -m http.server'
@@ -69,7 +79,7 @@ alias servelocal='python3 -m http.server'
 if command -v exa &>/dev/null; then
   alias ls='exa --color=always --group-directories-first'
   alias la='exa -a --color=always --group-directories-first'
-  alias ll='exa -l --color=always --group-directories-first'
+  alias ll='exa -al --color=always --group-directories-first'
   alias lt='exa -aT --color=always --group-directories-first'
 else
   alias ls='ls --color=always'
@@ -77,6 +87,26 @@ else
   alias la='ls -A --color=always'
   alias l='ls -CF --color=always'
 fi
+
+# node version manager  
+nload() {
+  local GIT_DIR="/home/mcking/github-projects"
+
+  if [ -n "$1" ]; then
+    version="$1"
+  else
+    case "$PWD" in
+      $GIT_DIR) version="14.21.3";;
+      *) echo "Usage: nload <version>"; return 1;;
+    esac
+  fi
+
+  if [ $version = "14.21.3" ]; then
+    version="system"
+  fi
+  nvm use $version &>/dev/null;
+  # export/source authentication token here (if any).
+}
 
 # note maker
 note() {
@@ -102,16 +132,26 @@ notes() {
   command batcat $NOTES_FILE
 }
 
-# source
+# source .bashrc
 alias ss='source ~/.bashrc'
 
 # trash-cli as rm
 if command -v trash &>/dev/null; then
-  alias rm='trash'
+  alias rm='trash-put'
   alias rmll='trash-list'
   alias rmrs='trash-restore'
   alias rmrx='trash-empty'
 fi
+
+# view ssh aliases
+sshl() {
+  local SSH_FILE="$HOME/.bash/ssh_aliases"
+  if [ -n "$1" ]; then
+    grep -i "$1" "$SSH_FILE"
+  else
+    batcat "$SSH_FILE"
+  fi
+}
 
 # vim as neovim
 if command -v nvim &>/dev/null; then
