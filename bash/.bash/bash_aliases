@@ -8,7 +8,7 @@ alias ..='cd ..'
 alias ...='cd -'
 
 # check open ports
-alias ports='netstat -tulanp'
+alias ports='netstat -tlnp'
 
 # confirmation before overwriting
 alias cp="cp -i"
@@ -36,6 +36,7 @@ alias dcdrm='docker-compose down --rmi local -v'
 alias clone='git clone'
 alias gb='git branch'
 alias gd='git diff'
+alias gf='git fetch'
 alias gs='git status'
 alias gl='git log'
 alias gps='git push'
@@ -43,10 +44,12 @@ alias gp='git pull'
 alias gpo='git pull origin main'
 alias gpr='git pull --rebase'
 alias gr='git revert'
+alias grs='git restore'
 alias gsh='git stash'
 alias gsp='git stash pop'
 abbrev-alias -g gco='git checkout'
 abbrev-alias -g gcm='git checkout main'
+abbrev-alias -g gfc='git fetch && git checkout'
 alias gw='git whatchanged'
 
 # grep
@@ -54,7 +57,7 @@ alias grep='grep --color=always'
 alias egrep='egrep --color=always'
 alias fgrep='find . | grep --color=always'  # find a file
 alias hgrep='history | grep --color=always' # find an old command
-alias psgrep='ps aux | grep --color=always' # get process details
+alias psgrep='ps -ef | grep --color=always' # get process details
 
 # hyperinator
 alias hype='hyperinator load'
@@ -91,7 +94,6 @@ fi
 # node version manager  
 nload() {
   local GIT_DIR="/home/mcking/github-projects"
-
   if [ -n "$1" ]; then
     version="$1"
   else
@@ -100,11 +102,10 @@ nload() {
       *) echo "Usage: nload <version>"; return 1;;
     esac
   fi
-
   if [ $version = "14.21.3" ]; then
     version="system"
   fi
-  nvm use $version &>/dev/null;
+  command nvm use $version &>/dev/null;
   # export/source authentication token here (if any).
 }
 
@@ -147,9 +148,9 @@ fi
 sshl() {
   local SSH_FILE="$HOME/.bash/ssh_aliases"
   if [ -n "$1" ]; then
-    grep -i "$1" "$SSH_FILE"
+    command grep -i "$1" "$SSH_FILE"
   else
-    batcat "$SSH_FILE"
+    command batcat "$SSH_FILE"
   fi
 }
 
