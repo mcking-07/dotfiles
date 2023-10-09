@@ -7,9 +7,9 @@
 TERM="xterm-256color"
 
 # history config
-HISTCONTROL=ignoreboth # no duplicates or lines starting with a space in the history
-HISTSIZE=2000          # set number of lines in the history
-HISTFILESIZE=2000      # set the history file size
+HISTCONTROL=ignoreboth  # no duplicates or lines starting with a space in the history
+HISTSIZE=10000          # set number of lines in the history
+HISTFILESIZE=10000      # set the history file size
 
 # shopt config
 shopt -s autocd         # change to named directory

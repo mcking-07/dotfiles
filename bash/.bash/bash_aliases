@@ -14,10 +14,15 @@ alias ports='netstat -tlnp'
 alias cp="cp -i"
 alias mv='mv -i'
 
+# diff but better
+if command -v delta &>/dev/null; then
+  alias diff='delta --hyperlinks --line-numbers --navigate --true-color=always --side-by-side'
+fi
+
 # docker
-alias dps='docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
-alias dpsa='docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"'
-alias dimg='docker image ls --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}"'
+alias dps='docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}" | (read -r title; printf "%s\n" "$title"; sort)'
+alias dpsa='docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}" | (read -r title; printf "%s\n" "$title"; sort)'
+alias dimg='docker image ls --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}" | (read -r title; printf "%s\n" "$title"; sort)'
 abbrev-alias -g dstart='docker start'
 abbrev-alias -g dstop='docker stop'
 abbrev-alias -g drm='docker rm'
@@ -38,6 +43,7 @@ alias gb='git branch'
 alias gd='git diff'
 alias gf='git fetch'
 alias gs='git status'
+alias gst='git status'
 alias gl='git log'
 alias gps='git push'
 alias gp='git pull'
@@ -68,9 +74,9 @@ alias jctl="journalctl -p 3 -xb" # erros only
 # launch http server
 serve() {
   local port="${1:-8000}"
-  if command -v lt &> /dev/null; then
+  if command -v lt &>/dev/null; then
     command python3 -m http.server | lt -p "$port"
-  elif command -v ngrok &> /dev/null; then
+  elif command -v ngrok &>/dev/null; then
     command python3 -m http.server | ngrok http "$port"
   else
     echo "Usage: Install either 'lt' or 'ngrok' to expose local ports"
@@ -93,7 +99,8 @@ fi
 
 # node version manager  
 nload() {
-  local GIT_DIR="/home/mcking/github-projects"
+  local GIT_DIR="$HOME/github-projects"
+
   if [ -n "$1" ]; then
     version="$1"
   else
@@ -102,10 +109,12 @@ nload() {
       *) echo "Usage: nload <version>"; return 1;;
     esac
   fi
+  
   if [ $version = "14.21.3" ]; then
     version="system"
   fi
-  command nvm use $version &>/dev/null;
+
+  nvm use $version &>/dev/null;
   # export/source authentication token here (if any).
 }
 
@@ -133,22 +142,38 @@ notes() {
   command batcat $NOTES_FILE
 }
 
+# run commands parallelly
+multirun() {
+  local FILE="$1"
+  local TIMES="${2:-2}"
+  if ! [ -x "$FILE" ]; then
+    echo "error: $FILE is not executable."
+    return 1
+  fi
+  seq "$TIMES" | xargs -P0 -n1 "$FILE"
+}
+
 # source .bashrc
-alias ss='source ~/.bashrc'
+alias ss="source $HOME/.bashrc"
+
+# speedtest
+if command -v speedtest &>/dev/null; then
+  alias amispeed='speedtest-cli --single'
+fi
 
 # trash-cli as rm
 if command -v trash &>/dev/null; then
   alias rm='trash-put'
   alias rmll='trash-list'
-  alias rmrs='trash-restore'
   alias rmrx='trash-empty'
+  alias rmrs='trash-restore'
 fi
 
 # view ssh aliases
 sshl() {
   local SSH_FILE="$HOME/.bash/ssh_aliases"
   if [ -n "$1" ]; then
-    command grep -i "$1" "$SSH_FILE"
+    command grep -i --color=always "$1" "$SSH_FILE"
   else
     command batcat "$SSH_FILE"
   fi
