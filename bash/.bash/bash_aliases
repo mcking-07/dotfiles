@@ -1,72 +1,72 @@
 # custom bash aliases and abbreviations by @mcking-07
 
 # batcat
-alias bat='batcat'
+alias bat="batcat"
 
 # change directory
-alias ..='cd ..'
-alias ...='cd -'
+alias ..="cd .."
+alias ...="cd -"
 
 # check open ports
-alias ports='netstat -tlnp'
+alias ports="netstat -tlnp"
 
 # confirmation before overwriting
 alias cp="cp -i"
-alias mv='mv -i'
+alias mv="mv -i"
 
 # diff but better
 if command -v delta &>/dev/null; then
-  alias diff='delta --hyperlinks --line-numbers --navigate --true-color=always --side-by-side'
+  alias diff="delta --hyperlinks --line-numbers --navigate --true-color=always --side-by-side"
 fi
 
 # docker
 alias dps='docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}" | (read -r title; printf "%s\n" "$title"; sort)'
 alias dpsa='docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}" | (read -r title; printf "%s\n" "$title"; sort)'
 alias dimg='docker image ls --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}" | (read -r title; printf "%s\n" "$title"; sort)'
-abbrev-alias -g dstart='docker start'
-abbrev-alias -g dstop='docker stop'
-abbrev-alias -g drm='docker rm'
-abbrev-alias -g drmi='docker rmi'
-abbrev-alias -g dklg='docker logs'
-alias dvlm='docker volume ls'
-alias dntrk='docker network ls'
-abbrev-alias -g dkterm='docker exec -it'
-alias dcup='docker-compose up'
-alias dcupd='docker-compose up -d'
-alias dclgs='docker-compose logs -f'
-alias dcdn='docker-compose down'
-alias dcdrm='docker-compose down --rmi local -v'
+abbrev-alias -g dstart="docker start"
+abbrev-alias -g dstop="docker stop"
+abbrev-alias -g drm="docker rm"
+abbrev-alias -g drmi="docker rmi"
+abbrev-alias -g dklg="docker logs"
+alias dvlm="docker volume ls"
+alias dntrk="docker network ls"
+abbrev-alias -g dkterm="docker exec -it"
+alias dcup="docker-compose up"
+alias dcupd="docker-compose up -d"
+alias dclgs="docker-compose logs -f"
+alias dcdn="docker-compose down"
+alias dcdrm="docker-compose down --rmi local -v"
 
 # git
-alias clone='git clone'
-alias gb='git branch'
-alias gd='git diff'
-alias gf='git fetch'
-alias gs='git status'
-alias gst='git status'
-alias gl='git log'
-alias gps='git push'
-alias gp='git pull'
-alias gpo='git pull origin main'
-alias gpr='git pull --rebase'
-alias gr='git revert'
-alias grs='git restore'
-alias gsh='git stash'
-alias gsp='git stash pop'
-abbrev-alias -g gco='git checkout'
-abbrev-alias -g gcm='git checkout main'
-abbrev-alias -g gfc='git fetch && git checkout'
-alias gw='git whatchanged'
+alias clone="git clone"
+alias gb="git branch"
+alias gd="git diff"
+alias gf="git fetch"
+alias gs="git status"
+alias gst="git status"
+alias gl="git log"
+alias gps="git push"
+alias gp="git pull"
+alias gpo="git pull origin main"
+alias gpr="git pull --rebase"
+alias gr="git revert"
+alias grs="git restore"
+alias gsh="git stash"
+alias gsp="git stash pop"
+abbrev-alias -g gco="git checkout"
+abbrev-alias -g gcm="git checkout main"
+abbrev-alias -g gfc="git fetch && git checkout"
+alias gw="git whatchanged"
 
 # grep
-alias grep='grep --color=always'
-alias egrep='egrep --color=always'
-alias fgrep='find . | grep --color=always'  # find a file
-alias hgrep='history | grep --color=always' # find an old command
-alias psgrep='ps -ef | grep --color=always' # get process details
+alias grep="grep --color=always"
+alias egrep="egrep --color=always"
+alias fgrep="find . | grep --color=always"  # find a file
+alias hgrep="history | grep --color=always" # find an old command
+alias psgrep="ps -ef | grep --color=always" # get process details
 
 # hyperinator
-alias hype='hyperinator load'
+alias hype="hyperinator load"
 
 # journalctl
 alias jctl="journalctl -p 3 -xb" # erros only
@@ -79,23 +79,34 @@ serve() {
   elif command -v ngrok &>/dev/null; then
     command python3 -m http.server | ngrok http "$port"
   else
-    echo "Usage: Install either 'lt' or 'ngrok' to expose local ports"
+    echo "Usage: Install either <lt> or <ngrok> to expose local ports"
   fi
 }
-alias servelocal='python3 -m http.server'
+alias servelocal="python3 -m http.server"
 
 # ls config
 if command -v exa &>/dev/null; then
-  alias ls='exa --color=always --group-directories-first'
-  alias la='exa -a --color=always --group-directories-first'
-  alias ll='exa -al --color=always --group-directories-first'
-  alias lt='exa -aT --color=always --group-directories-first'
+  alias ls="exa --color=always --group-directories-first"
+  alias la="exa -a --color=always --group-directories-first"
+  alias ll="exa -al --color=always --group-directories-first"
+  alias lt="exa -aT --color=always --group-directories-first"
 else
-  alias ls='ls --color=always'
-  alias ll='ls -alF --color=always'
-  alias la='ls -A --color=always'
-  alias l='ls -CF --color=always'
+  alias ls="ls --color=always"
+  alias ll="ls -alF --color=always"
+  alias la="ls -A --color=always"
+  alias l="ls -CF --color=always"
 fi
+
+# multirun commands parallelly
+multirun() {
+  local FILE="$1"
+  local TIMES="${2:-2}"
+  if ! [ -x "$FILE" ]; then
+    echo "error: $FILE is not executable."
+    return 1
+  fi
+  seq "$TIMES" | xargs -P0 -n1 "$FILE"
+}
 
 # node version manager  
 nload() {
@@ -142,31 +153,43 @@ notes() {
   command batcat $NOTES_FILE
 }
 
-# run commands parallelly
-multirun() {
-  local FILE="$1"
-  local TIMES="${2:-2}"
-  if ! [ -x "$FILE" ]; then
-    echo "error: $FILE is not executable."
-    return 1
+# python env manager
+pload() {
+  local ENV_DIR=".pyenv"
+  local SCRIPT_PATH="$ENV_DIR/bin/activate"
+
+  if [ -d "$ENV_DIR" ] && [ -f "$SCRIPT_PATH" ]; then
+    source "$SCRIPT_PATH"
+  else
+    read -p "environment not found. create one? (Y|n) " choice
+    case $choice in
+      Y|y|"")
+        python3 -m venv "$ENV_DIR" && source "$SCRIPT_PATH" || echo "environment setup failed.";;
+      N|n)
+        echo "cancelled!";;
+      *)
+        echo "unrecognized option.";;
+    esac
   fi
-  seq "$TIMES" | xargs -P0 -n1 "$FILE"
 }
 
 # source .bashrc
 alias ss="source $HOME/.bashrc"
 
+# source .profile
+alias sp="source $HOME/.profile"
+
 # speedtest
 if command -v speedtest &>/dev/null; then
-  alias amispeed='speedtest-cli --single'
+  alias amispeed="speedtest-cli --single"
 fi
 
 # trash-cli as rm
 if command -v trash &>/dev/null; then
-  alias rm='trash-put'
-  alias rmll='trash-list'
-  alias rmrx='trash-empty'
-  alias rmrs='trash-restore'
+  alias rm="trash-put"
+  alias rmll="trash-list"
+  alias rmrx="trash-empty"
+  alias rmrs="trash-restore"
 fi
 
 # view ssh aliases
@@ -181,12 +204,12 @@ sshl() {
 
 # vim as neovim
 if command -v nvim &>/dev/null; then
-  alias vi='nvim'
-  alias vim='nvim'
+  alias vi="nvim"
+  alias vim="nvim"
 fi
 
 # xdg-open
-alias open='xdg-open'
+alias open="xdg-open"
 
 # zipfile extractor
 ex() {
