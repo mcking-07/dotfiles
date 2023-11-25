@@ -3,3 +3,7 @@
   email = mohammad.muzammil100@gmail.com
 [credential]
   helper = store
+[core]
+  pager = delta "--hyperlinks --line-numbers --navigate --true-color=always"
+[delta]
+  side-by-side = true
